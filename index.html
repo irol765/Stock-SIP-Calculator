@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>US Stock SIP Calculator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+            },
+            colors: {
+              primary: {
+                50: '#f0f9ff',
+                100: '#e0f2fe',
+                500: '#0ea5e9',
+                600: '#0284c7',
+                700: '#0369a1',
+              }
+            }
+          },
+        },
+      }
+    </script>
+    <style>
+      @media print {
+        @page {
+          size: auto;
+          margin: 15mm;
+        }
+        body {
+          background-color: white !important;
+          color: black !important;
+          -webkit-print-color-adjust: exact !important;
+          print-color-adjust: exact !important;
+        }
+        
+        /* Hide everything by default that shouldn't be in print */
+        .no-print, 
+        .no-print-section,
+        header,
+        button {
+          display: none !important;
+        }
+
+        /* Specifically target the grid layout */
+        .lg\:col-span-8 {
+          width: 100% !important;
+          grid-column: span 12 !important;
+        }
+        
+        /* Ensure charts and cards look good */
+        .bg-white, .dark\:bg-gray-800 {
+          background-color: white !important;
+          border: 1px solid #ddd !important;
+          color: black !important;
+          box-shadow: none !important;
+        }
+
+        /* Ensure texts are dark */
+        .text-gray-900, .dark\:text-white {
+          color: #111 !important;
+        }
+        .text-gray-500, .dark\:text-gray-400 {
+          color: #444 !important;
+        }
+
+        /* Chart adjustments */
+        .recharts-wrapper {
+          width: 100% !important;
+          height: auto !important;
+        }
+
+        /* Show a print header */
+        .print-header {
+          display: block !important;
+          margin-bottom: 20px;
+          border-bottom: 2px solid #eee;
+          padding-bottom: 10px;
+        }
+
+        .print-break-inside {
+          break-inside: avoid;
+        }
+      }
+      
+      .print-header {
+        display: none;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react": "https://aistudiocdn.com/react@^19.2.0",
+    "react-markdown": "https://aistudiocdn.com/react-markdown@^10.1.0",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
+    "recharts": "https://aistudiocdn.com/recharts@^3.5.0"
+  }
+}
+</script>
+</head>
+  <body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <div id="root"></div>
+  </body>
+</html>

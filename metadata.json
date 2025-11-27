@@ -1,0 +1,5 @@
+{
+  "name": "US Stock SIP Calculator",
+  "description": "A modern, dark-mode capable investment calculator for US ETFs (VOO, QQQ, etc.). Features historical backtesting, portfolio mixing, AI-powered analysis reports, and PDF-ready views.",
+  "requestFramePermissions": []
+}

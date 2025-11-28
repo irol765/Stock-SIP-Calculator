@@ -140,7 +140,18 @@ export const TRANSLATIONS: Record<Language, any> = {
     tickerPlaceholder: "Ticker (e.g. VOO)",
     customTickerWarning: "Note: Custom tickers use proxy data in historical mode if unknown.",
     yearlyBreakdown: "Yearly Breakdown",
-    yearColumn: "Year"
+    yearColumn: "Year",
+    // PDF Report
+    reportTitle: "Investment Report",
+    investmentPlan: "Investment Plan",
+    sipStrategy: "SIP Strategy Simulation & Analysis",
+    preparedFor: "Prepared For",
+    investor: "Client / Investor",
+    generatedOn: "Generated On",
+    confidential: "CONFIDENTIAL - Generated via SIP Calculator",
+    analysisData: "Analysis Data",
+    configTitle: "Configuration",
+    appendix: "Appendix"
   },
   zh: {
     appTitle: "美股定投计算器",
@@ -191,7 +202,18 @@ export const TRANSLATIONS: Record<Language, any> = {
     tickerPlaceholder: "代码 (如 VOO)",
     customTickerWarning: "注意：未知代码在回测中将使用替代数据。",
     yearlyBreakdown: "年度数据明细",
-    yearColumn: "年份"
+    yearColumn: "年份",
+    // PDF Report
+    reportTitle: "投资分析报告",
+    investmentPlan: "定投增值计划",
+    sipStrategy: "定投策略模拟与分析",
+    preparedFor: "致",
+    investor: "投资人 / 客户",
+    generatedOn: "生成日期",
+    confidential: "机密文件 - 由美股定投计算器生成",
+    analysisData: "数据分析",
+    configTitle: "配置参数",
+    appendix: "附录"
   },
   ja: {
     appTitle: "米国株積立計算機",
@@ -241,6 +263,17 @@ export const TRANSLATIONS: Record<Language, any> = {
     tickerPlaceholder: "銘柄 (例: VOO)",
     customTickerWarning: "注: 未知の銘柄は代替データを使用します。",
     yearlyBreakdown: "年間内訳",
-    yearColumn: "年"
+    yearColumn: "年",
+    // PDF Report
+    reportTitle: "投資分析レポート",
+    investmentPlan: "積立投資プラン",
+    sipStrategy: "積立シミュレーション＆分析",
+    preparedFor: "対象",
+    investor: "クライアント / 投資家",
+    generatedOn: "作成日",
+    confidential: "社外秘 - 米国株積立計算機により作成",
+    analysisData: "分析データ",
+    configTitle: "設定パラメータ",
+    appendix: "付録"
   }
 };

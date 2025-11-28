@@ -30,66 +30,111 @@
     <style>
       @media print {
         @page {
-          size: auto;
-          margin: 15mm;
+          size: A4;
+          margin: 15mm 15mm;
         }
+        
         body {
           background-color: white !important;
-          color: black !important;
+          color: #111 !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
         }
         
-        /* Hide everything by default that shouldn't be in print */
+        /* Hide UI elements */
         .no-print, 
         .no-print-section,
         header,
-        button {
+        button,
+        input,
+        select,
+        .text-xs.underline {
           display: none !important;
         }
 
-        /* Specifically target the grid layout */
+        /* Layout overrides */
         .lg\:col-span-8 {
           width: 100% !important;
           grid-column: span 12 !important;
         }
         
-        /* Ensure charts and cards look good */
+        .max-w-7xl {
+          max-width: 100% !important;
+          padding: 0 !important;
+          margin: 0 !important;
+        }
+
+        /* Card Styling for Print */
         .bg-white, .dark\:bg-gray-800 {
           background-color: white !important;
           border: 1px solid #ddd !important;
-          color: black !important;
           box-shadow: none !important;
+          border-radius: 8px !important;
+          margin-bottom: 20px;
         }
 
-        /* Ensure texts are dark */
+        /* Typography overrides */
         .text-gray-900, .dark\:text-white {
-          color: #111 !important;
+          color: #000 !important;
         }
         .text-gray-500, .dark\:text-gray-400 {
           color: #444 !important;
         }
-
-        /* Chart adjustments */
-        .recharts-wrapper {
-          width: 100% !important;
-          height: auto !important;
+        .text-primary-600, .dark\:text-primary-400 {
+          color: #0284c7 !important; /* Force a readable blue */
+        }
+        .prose, .dark\:prose-invert {
+          color: #000 !important;
         }
 
-        /* Show a print header */
-        .print-header {
+        /* Recharts / SVG Fixes for Print */
+        /* Force axis text to be black regardless of theme */
+        .recharts-text {
+          fill: #000 !important; 
+        }
+        /* Force grid lines to be visible but subtle */
+        .recharts-cartesian-grid line {
+          stroke: #ccc !important;
+          opacity: 0.5 !important;
+        }
+        /* Ensure lines are visible */
+        .recharts-curve {
+          stroke-width: 2px !important;
+        }
+        /* Fix background areas */
+        .recharts-surface {
+          overflow: visible;
+        }
+
+        /* Print Header/Footer visibility */
+        .print-header-container {
           display: block !important;
-          margin-bottom: 20px;
-          border-bottom: 2px solid #eee;
-          padding-bottom: 10px;
+          margin-bottom: 24px;
+          border-bottom: 2px solid #0284c7;
+          padding-bottom: 12px;
+        }
+        
+        .print-footer-container {
+          display: block !important;
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          text-align: center;
+          font-size: 10px;
+          color: #666;
+          border-top: 1px solid #eee;
+          padding-top: 8px;
+          background: white;
         }
 
         .print-break-inside {
           break-inside: avoid;
+          page-break-inside: avoid;
         }
       }
       
-      .print-header {
+      .print-header-container, .print-footer-container {
         display: none;
       }
     </style>

@@ -1,0 +1,24 @@
+server {
+    listen 80;
+    server_name localhost;
+
+    root /usr/share/nginx/html;
+    index index.html;
+
+    # Handle SPA routing: redirect all 404s to index.html
+    location / {
+        try_files $uri $uri/ /index.html;
+    }
+
+    # Optional: Cache static assets (JS, CSS, Images) for better performance
+    location ~* \.(js|css|png|jpg|jpeg|gif|ico|svg)$ {
+        expires 1y;
+        add_header Cache-Control "public, no-transform";
+    }
+
+    # Error pages
+    error_page 500 502 503 504 /50x.html;
+    location = /50x.html {
+        root /usr/share/nginx/html;
+    }
+}

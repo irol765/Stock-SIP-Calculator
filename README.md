@@ -11,6 +11,19 @@
 *   **PDF 导出**: 针对打印优化的界面，可直接保存为 PDF 报告。
 *   **Docker 支持**: 支持容器化部署，且 API Key 可在启动时动态注入。
 
+## Vercel 部署 (推荐)
+
+最简单的部署方式是使用 Vercel。
+
+1.  **Fork** 本项目到你的 GitHub 账号。
+2.  在 [Vercel](https://vercel.com) 导入该项目。
+3.  在部署配置页面的 **Environment Variables** 部分：
+    *   添加 Key: `API_KEY`
+    *   添加 Value: 你的 Google Gemini API Key
+4.  点击 **Deploy**。
+
+Vercel 会自动检测 `vite.config.ts` 并完成构建。
+
 ## Docker 部署指南
 
 本项目采用“构建一次，到处运行”的策略。API Key 不需要打包在镜像中，而是在运行容器时通过环境变量传入。

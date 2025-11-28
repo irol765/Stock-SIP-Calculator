@@ -8,7 +8,7 @@ import { calculateSIP } from './utils/calculations';
 import { TRANSLATIONS, EXCHANGE_RATES } from './constants';
 
 const App = () => {
-  // Theme State
+  // Theme State - Default to Light Mode (false) as requested
   const [darkMode, setDarkMode] = useState(false);
   const [language, setLanguage] = useState<Language>('en');
 
@@ -34,10 +34,6 @@ const App = () => {
 
   // Effects
   useEffect(() => {
-    // Check system preference
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      setDarkMode(true);
-    }
     // Check browser language
     const browserLang = navigator.language.slice(0, 2);
     if (browserLang === 'zh') setLanguage('zh');
@@ -94,11 +90,11 @@ const App = () => {
 
         {/* Right Col: Visualization */}
         <div className="lg:col-span-8">
-          <div className="flex justify-between items-center mb-6">
+          <div className="flex justify-between items-center mb-6 no-print">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t.resultsTitle}</h2>
             <button 
               onClick={handlePrint}
-              className="flex items-center space-x-2 px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity no-print"
+              className="flex items-center space-x-2 px-4 py-2 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 rounded-lg text-sm font-medium hover:opacity-90 transition-opacity"
             >
               <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" /></svg>
               <span>{t.exportPDF}</span>

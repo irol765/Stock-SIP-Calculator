@@ -141,6 +141,7 @@ export const TRANSLATIONS: Record<Language, any> = {
     customTickerWarning: "Note: Custom tickers use proxy data in historical mode if unknown.",
     yearlyBreakdown: "Yearly Breakdown",
     yearColumn: "Year",
+    professionalAssessment: "Professional Assessment",
     // PDF Report
     reportTitle: "Investment Report",
     investmentPlan: "Investment Plan",
@@ -203,6 +204,7 @@ export const TRANSLATIONS: Record<Language, any> = {
     customTickerWarning: "注意：未知代码在回测中将使用替代数据。",
     yearlyBreakdown: "年度数据明细",
     yearColumn: "年份",
+    professionalAssessment: "AI 专家评估",
     // PDF Report
     reportTitle: "投资分析报告",
     investmentPlan: "定投增值计划",
@@ -264,6 +266,7 @@ export const TRANSLATIONS: Record<Language, any> = {
     customTickerWarning: "注: 未知の銘柄は代替データを使用します。",
     yearlyBreakdown: "年間内訳",
     yearColumn: "年",
+    professionalAssessment: "専門家による評価",
     // PDF Report
     reportTitle: "投資分析レポート",
     investmentPlan: "積立投資プラン",

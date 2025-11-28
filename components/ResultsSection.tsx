@@ -58,10 +58,10 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ results, state, 
       </div>
 
       {/* PAGE 2: DATA & CHARTS */}
-      <div className="space-y-6 print-page-2">
+      <div className="space-y-6 print:space-y-4 print-page-2">
         
         {/* Print Header for Page 2 */}
-        <div className="hidden print:block mb-8 pb-4 border-b border-gray-200">
+        <div className="hidden print:block mb-8 print:mb-4 pb-4 border-b border-gray-200">
            <div className="flex justify-between items-end">
              <h2 className="text-3xl font-bold text-gray-900 m-0 border-none p-0">{t.analysisData}</h2>
              <span className="text-gray-400 text-sm">Page 2</span>
@@ -69,12 +69,12 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ results, state, 
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 print-break-inside">
+        <div className="grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 gap-4">
+          <div className="bg-white dark:bg-gray-800 p-6 print:p-4 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 print-break-inside">
             <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{t.totalInvested}</p>
             <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">{formatCurrency(finalResult.invested)}</p>
           </div>
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 print-break-inside relative overflow-hidden">
+          <div className="bg-white dark:bg-gray-800 p-6 print:p-4 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 print-break-inside relative overflow-hidden">
             <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{t.finalValue}</p>
             <p className="text-2xl font-bold text-primary-600 dark:text-primary-400 mt-2">{formatCurrency(finalResult.value)}</p>
             {/* Real Value (Inflation Adjusted) */}
@@ -83,7 +83,7 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ results, state, 
                 {t.inflationAdjusted}: {formatCurrency(finalResult.inflationAdjustedValue)}
             </div>
           </div>
-          <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 print-break-inside">
+          <div className="bg-white dark:bg-gray-800 p-6 print:p-4 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 print-break-inside">
             <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{t.totalReturn}</p>
             <div className="flex items-baseline mt-2 space-x-2">
                <p className={`text-2xl font-bold ${totalGain >= 0 ? 'text-green-500' : 'text-red-500'}`}>
@@ -95,9 +95,9 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ results, state, 
         </div>
 
         {/* Chart */}
-        <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 print-break-inside">
-          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6">{t.growthProjection}</h3>
-          <div className="h-[400px] w-full">
+        <div className="bg-white dark:bg-gray-800 p-6 print:p-4 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 print-break-inside">
+          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 print:mb-2">{t.growthProjection}</h3>
+          <div className="h-[400px] print:h-[250px] w-full">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={results} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
                 <defs>
@@ -163,8 +163,8 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ results, state, 
         </div>
 
         {/* Parameters Summary (for Page 2 Reference) */}
-        <div className="hidden print:block mt-8 pt-8 border-t border-gray-100">
-           <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4">{t.configTitle}</h4>
+        <div className="hidden print:block mt-8 print:mt-4 pt-8 print:pt-4 border-t border-gray-100">
+           <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4 print:mb-2">{t.configTitle}</h4>
            <div className="flex space-x-8 text-sm">
                <div><span className="text-gray-500">{t.monthlyContribution}:</span> <span className="font-semibold">{formatCurrency(state.monthlyContribution)}</span></div>
                <div><span className="text-gray-500">{t.duration}:</span> <span className="font-semibold">{state.years} {t.yearsSuffix}</span></div>
@@ -174,13 +174,13 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ results, state, 
       </div>
 
       {/* PAGE 3: DETAILED TABLE (Print Only) */}
-      <div className="hidden print:block pt-8" style={{ pageBreakBefore: 'always' }}>
+      <div className="hidden print:block pt-8 print:text-xs" style={{ pageBreakBefore: 'always' }}>
          <div className="flex justify-between items-end mb-6 border-b border-gray-200 pb-4">
              <h2 className="text-2xl font-bold text-gray-900 m-0">{t.yearlyBreakdown}</h2>
              <span className="text-gray-400 text-sm">{t.appendix}</span>
          </div>
          
-         <table className="w-full text-sm text-left border-collapse">
+         <table className="w-full text-left border-collapse">
             <thead>
                <tr className="border-b-2 border-gray-800">
                  <th className="py-2 text-gray-600 font-bold">{t.yearColumn}</th>
@@ -192,10 +192,10 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ results, state, 
             <tbody>
                {results.map((r, i) => (
                  <tr key={r.year} className={`border-b border-gray-200 ${i % 2 === 0 ? 'bg-gray-50' : ''}`}>
-                    <td className="py-2 pl-2 font-mono">{r.year}</td>
-                    <td className="py-2">{formatCurrency(r.invested)}</td>
-                    <td className="py-2 font-semibold text-gray-900">{formatCurrency(r.value)}</td>
-                    <td className="py-2 text-gray-500 italic">{formatCurrency(r.inflationAdjustedValue)}</td>
+                    <td className="py-2 print:py-0.5 pl-2 font-mono">{r.year}</td>
+                    <td className="py-2 print:py-0.5">{formatCurrency(r.invested)}</td>
+                    <td className="py-2 print:py-0.5 font-semibold text-gray-900">{formatCurrency(r.value)}</td>
+                    <td className="py-2 print:py-0.5 text-gray-500 italic">{formatCurrency(r.inflationAdjustedValue)}</td>
                  </tr>
                ))}
             </tbody>

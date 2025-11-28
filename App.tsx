@@ -72,10 +72,10 @@ const App = () => {
       currency={state.currency}
       setCurrency={handleCurrencyChange}
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 print:block print:gap-0">
         
-        {/* Left Col: Inputs */}
-        <div className="lg:col-span-4 space-y-6">
+        {/* Left Col: Inputs - Hidden in Print */}
+        <div className="lg:col-span-4 space-y-6 print:hidden">
           <InputForm state={state} onChange={handleStateChange} t={t} />
           
           <div className="hidden lg:block bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl border border-blue-100 dark:border-blue-800 no-print">
@@ -89,7 +89,7 @@ const App = () => {
         </div>
 
         {/* Right Col: Visualization */}
-        <div className="lg:col-span-8">
+        <div className="lg:col-span-8 print:w-full">
           <div className="flex justify-between items-center mb-6 no-print">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{t.resultsTitle}</h2>
             <button 

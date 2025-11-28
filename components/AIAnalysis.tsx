@@ -123,7 +123,7 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({ state, results, language
           {/* Print-only title for the section (Page 3 Header) */}
           {report && (
               <div className="hidden print:block mb-8 border-b-2 border-gray-200 pb-4">
-                  <h2 className="text-2xl font-bold text-gray-900">Professional Assessment</h2>
+                  <h2 className="text-2xl font-bold text-gray-900">{t.professionalAssessment}</h2>
               </div>
           )}
     

@@ -267,7 +267,7 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
 
          <div className="space-y-3 mt-4">
            {state.portfolio.map((item, idx) => (
-             <div key={item.id} className="grid grid-cols-12 gap-2 items-center">
+             <div key={item.id} className="grid grid-cols-12 gap-1 sm:gap-2 items-center">
                {/* Color Bar */}
                <div className="col-span-1 flex justify-center">
                  <div className="w-1.5 h-8 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }}></div>
@@ -280,7 +280,7 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
                    value={item.ticker}
                    onChange={(e) => handlePortfolioChange(item.id, 'ticker', e.target.value.toUpperCase())}
                    placeholder={t.tickerPlaceholder || "Type/Select"}
-                   className="w-full h-10 px-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 outline-none uppercase"
+                   className="w-full h-10 py-2 px-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-primary-500 outline-none uppercase"
                  />
                </div>
 
@@ -292,7 +292,7 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
                     max="100"
                     value={item.percentage}
                     onChange={(e) => handlePortfolioChange(item.id, 'percentage', Number(e.target.value))}
-                    className="w-full h-full px-3 pr-7 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 outline-none text-right"
+                    className="w-full h-full py-2 px-2 pr-6 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-primary-500 outline-none text-right"
                     placeholder="%"
                   />
                   <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">%</span>
@@ -306,7 +306,7 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
                     step="0.01"
                     value={item.expenseRatio}
                     onChange={(e) => handlePortfolioChange(item.id, 'expenseRatio', Number(e.target.value))}
-                    className="w-full h-full px-3 pr-7 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 outline-none text-right"
+                    className="w-full h-full py-2 px-2 pr-6 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-primary-500 outline-none text-right"
                     placeholder="Fee"
                     title={t.expenseRatio}
                   />

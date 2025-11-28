@@ -23,8 +23,9 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ results, state, 
     <>
       {/* PAGE 1: COVER PAGE (Print Only) */}
       <div className="print-cover-page">
+          {/* Top Section */}
           <div className="w-full pl-8">
-             <div className="mb-2 text-primary-600 font-bold tracking-wider uppercase text-sm">{t.reportTitle}</div>
+             <div className="mb-4 text-primary-600 font-bold tracking-wider uppercase text-sm">{t.reportTitle}</div>
              <h1 className="text-6xl font-extrabold text-gray-900 mb-6 tracking-tight leading-tight">
                {state.years} {t.yearsSuffix}<br/>{t.investmentPlan}
              </h1>
@@ -52,7 +53,8 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ results, state, 
              </div>
           </div>
           
-          <div className="absolute bottom-12 left-0 w-full text-center text-gray-400 text-xs">
+          {/* Bottom Section */}
+          <div className="w-full text-center text-gray-400 text-xs pl-8">
              {t.confidential}
           </div>
       </div>

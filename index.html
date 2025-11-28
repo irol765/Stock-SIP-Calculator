@@ -2,8 +2,17 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>US Stock SIP Calculator</title>
+    
+    <!-- PWA / iOS Support -->
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="apple-touch-icon" href="/icon.svg" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="SIP Calc" />
+
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
@@ -29,13 +38,13 @@
     </script>
     <style>
       @media print {
-        /* Standard Page Margins for content flow */
+        /* Standard Page Margins */
         @page {
           size: A4;
-          margin: 20mm; /* 2cm margins for all content pages */
+          margin: 20mm;
         }
         
-        /* First Page (Cover) - Full Bleed / No Margin */
+        /* Cover Page - Full Bleed Logic handled by container styling */
         @page :first {
           margin: 0 !important;
         }
@@ -66,14 +75,14 @@
         .lg\:col-span-8 { width: 100% !important; grid-column: span 12 !important; }
         .max-w-7xl { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
 
-        /* Page 1: Cover - Full Bleed settings */
+        /* Page 1: Cover Page */
         .print-cover-page {
           display: flex !important;
           flex-direction: column;
-          justify-content: center;
-          height: 297mm !important; /* Force exact A4 height */
+          justify-content: space-between; /* Anchor top and bottom */
+          height: 297mm !important; 
           width: 100% !important;
-          padding: 60px !important; /* Internal padding for text alignment */
+          padding: 30mm 20mm 20mm 20mm !important; /* Proper margins for text */
           background: white;
           position: relative;
           break-after: page; 
@@ -88,20 +97,20 @@
             left: 0;
             top: 0;
             bottom: 0;
-            width: 12px;
-            background-color: #0284c7; /* Primary 600 */
+            width: 15mm; /* Wider blue strip */
+            background-color: #0284c7; 
         }
 
-        /* Content Pages - Rely on @page margin, remove manual padding */
+        /* Content Pages */
         .print-page-2 {
-            padding: 0 !important;
+            padding-top: 20mm !important; /* Space after page break if needed */
             break-after: page;
             box-sizing: border-box;
             width: 100% !important;
         }
 
         .print-page-3 {
-            padding: 0 !important;
+            padding-top: 20mm !important;
             break-before: page;
             box-sizing: border-box;
             width: 100% !important;
@@ -151,7 +160,7 @@
 }
 </script>
 </head>
-  <body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-200">
+  <body class="bg-gray-50 text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-200 overscroll-none">
     <div id="root"></div>
     <script type="module" src="/index.tsx"></script>
   </body>

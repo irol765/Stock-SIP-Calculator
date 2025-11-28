@@ -29,9 +29,15 @@
     </script>
     <style>
       @media print {
+        /* Standard Page Margins for content flow */
         @page {
           size: A4;
-          margin: 0;
+          margin: 20mm; /* 2cm margins for all content pages */
+        }
+        
+        /* First Page (Cover) - Full Bleed / No Margin */
+        @page :first {
+          margin: 0 !important;
         }
         
         body, #root {
@@ -60,19 +66,19 @@
         .lg\:col-span-8 { width: 100% !important; grid-column: span 12 !important; }
         .max-w-7xl { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
 
-        /* Page 1: Cover */
+        /* Page 1: Cover - Full Bleed settings */
         .print-cover-page {
           display: flex !important;
           flex-direction: column;
           justify-content: center;
-          /* Use strict height to ensure single page */
-          height: 297mm; /* A4 height */
-          width: 100%;
-          padding: 60px;
+          height: 297mm !important; /* Force exact A4 height */
+          width: 100% !important;
+          padding: 60px !important; /* Internal padding for text alignment */
           background: white;
           position: relative;
-          break-after: page; /* Force break after cover */
+          break-after: page; 
           box-sizing: border-box;
+          margin: 0 !important;
         }
         
         /* Cover Decorative Element */
@@ -86,26 +92,25 @@
             background-color: #0284c7; /* Primary 600 */
         }
 
-        /* Page 2: Charts/Stats */
+        /* Content Pages - Rely on @page margin, remove manual padding */
         .print-page-2 {
-            padding: 40px;
-            break-after: page; /* Force break after charts */
-            min-height: 90vh; /* Ensure it takes up space */
+            padding: 0 !important;
+            break-after: page;
             box-sizing: border-box;
+            width: 100% !important;
         }
 
-        /* Page 3: AI Report */
         .print-page-3 {
-            padding: 40px;
+            padding: 0 !important;
             break-before: page;
-            min-height: 50vh;
             box-sizing: border-box;
+            width: 100% !important;
         }
 
         /* Styling enhancements for print */
         .bg-white, .dark\:bg-gray-800 {
           background-color: white !important;
-          border: none !important; /* Remove card borders for cleaner print */
+          border: none !important; 
           box-shadow: none !important;
           color: black !important;
         }
@@ -124,7 +129,7 @@
         .text-gray-900, .dark\:text-white { color: #000 !important; }
         .text-gray-500, .dark\:text-gray-400 { color: #555 !important; }
         .text-primary-600, .dark\:text-primary-400 { color: #0284c7 !important; }
-        .prose, .dark\:prose-invert { color: #000 !important; }
+        .prose, .dark\:prose-invert { color: #000 !important; max-width: 100% !important; }
         
         .print-break-inside { break-inside: avoid; margin-bottom: 2rem; }
       }

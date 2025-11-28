@@ -1,20 +1,60 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# US Stock SIP Calculator (美股定投计算器)
 
-# Run and deploy your AI Studio app
+A modern, responsive React application for simulating systematic investment plans (SIP) for US ETFs like VOO and QQQ. It features both fixed-rate projections and historical backtesting, along with AI-powered investment analysis using the Google Gemini API.
 
-This contains everything you need to run your app locally.
+## Features
 
-View your app in AI Studio: https://ai.studio/apps/drive/17UYvVUl-6X3RR6eWp9LPIgoecm8pcA4d
+*   **Investment Simulation**: Calculate future returns based on fixed annual rates or historical market data.
+*   **Portfolio Management**: Mix and match ETFs (VOO, QQQ, SPY, etc.) with custom weights.
+*   **Historical Backtesting**: Uses real historical returns from 2010 onwards.
+*   **AI Analysis**: Generates professional investment reports using **Google Gemini 2.5 Flash**.
+*   **Multi-language Support**: English, Simplified Chinese (简体中文), and Japanese (日本語).
+*   **Dark Mode**: Fully supported.
+*   **PDF Export**: Optimized print layout for saving reports as PDF.
 
-## Run Locally
+## Docker Deployment
 
-**Prerequisites:**  Node.js
+This project is designed to be deployed easily via Docker, with the API Key injected at runtime.
 
+### Prerequisites
 
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+*   Docker installed on your machine.
+*   A Google Gemini API Key. Get one at [Google AI Studio](https://aistudio.google.com/).
+
+### 1. Build the Image
+
+```bash
+docker build -t sip-calculator .
+```
+
+### 2. Run the Container
+
+Replace `YOUR_ACTUAL_API_KEY` with your real Gemini API key.
+
+```bash
+docker run -d -p 8080:80 -e API_KEY=YOUR_ACTUAL_API_KEY sip-calculator
+```
+
+Access the app at `http://localhost:8080`.
+
+### Development (Local)
+
+1.  Install dependencies:
+    ```bash
+    npm install
+    ```
+2.  Create a `.env` file (optional for dev, or just export in shell):
+    ```bash
+    export API_KEY=your_key_here
+    ```
+3.  Start dev server:
+    ```bash
+    npm run dev
+    ```
+
+## Technical Details
+
+*   **Frontend**: React 18, Vite, TypeScript, Tailwind CSS.
+*   **Charts**: Recharts.
+*   **AI Integration**: @google/genai SDK.
+*   **Containerization**: Nginx serving static files built with Vite. The API Key is injected into the static JavaScript bundles at container startup using a shell script.

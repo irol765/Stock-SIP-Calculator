@@ -267,14 +267,14 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
 
          <div className="space-y-3 mt-4">
            {state.portfolio.map((item, idx) => (
-             <div key={item.id} className="grid grid-cols-12 gap-1 sm:gap-2 items-center">
+             <div key={item.id} className="flex gap-2 items-center">
                {/* Color Bar */}
-               <div className="col-span-1 flex justify-center">
+               <div className="shrink-0 flex justify-center">
                  <div className="w-1.5 h-8 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }}></div>
                </div>
                
-               {/* Ticker Input */}
-               <div className="col-span-4">
+               {/* Ticker Input - Shortened (Flex 2) */}
+               <div className="flex-[2] min-w-0">
                  <input
                    list="tickers-list"
                    value={item.ticker}
@@ -284,37 +284,37 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
                  />
                </div>
 
-               {/* Percentage Input */}
-               <div className="col-span-3 relative h-10">
+               {/* Percentage Input - Lengthened (Flex 3) */}
+               <div className="flex-[3] relative h-10 min-w-0">
                   <input
                     type="number"
                     min="0"
                     max="100"
                     value={item.percentage}
                     onChange={(e) => handlePortfolioChange(item.id, 'percentage', Number(e.target.value))}
-                    className="w-full h-full py-2 px-2 pr-6 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-primary-500 outline-none text-right"
+                    className="w-full h-full py-2 px-2 pr-5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-primary-500 outline-none text-right"
                     placeholder="%"
                   />
-                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">%</span>
+                  <span className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">%</span>
                </div>
 
-               {/* Expense Ratio Input - Unified Height & Font */}
-               <div className="col-span-3 relative h-10">
+               {/* Expense Ratio Input - Lengthened (Flex 3) & Optimized Padding */}
+               <div className="flex-[3] relative h-10 min-w-0">
                  <input
                     type="number"
                     min="0"
                     step="0.01"
                     value={item.expenseRatio}
                     onChange={(e) => handlePortfolioChange(item.id, 'expenseRatio', Number(e.target.value))}
-                    className="w-full h-full py-2 px-2 pr-6 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-primary-500 outline-none text-right"
+                    className="w-full h-full py-2 px-2 pr-5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-xs sm:text-sm focus:ring-2 focus:ring-primary-500 outline-none text-right"
                     placeholder="Fee"
                     title={t.expenseRatio}
                   />
-                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">%</span>
+                  <span className="absolute right-1.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">%</span>
                </div>
 
                {/* Delete Button */}
-               <div className="col-span-1 flex justify-end">
+               <div className="shrink-0 flex justify-end">
                  <button
                    onClick={() => removePortfolioItem(item.id)}
                    className="p-1.5 text-gray-400 hover:text-red-500 transition-colors"

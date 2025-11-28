@@ -1,21 +1,37 @@
 import { HistoricalData, Language, PortfolioPreset, Currency } from './types';
 
 // Approximate annual returns for major ETFs used for backtesting demo
+// Extended back to 1985 using index proxies (S&P 500 for SPY/VOO, Nasdaq 100 for QQQ)
 export const HISTORICAL_RETURNS: HistoricalData = {
   'VOO': {
-    2010: 0.1506, 2011: 0.0211, 2012: 0.1600, 2013: 0.3239, 2014: 0.1369,
-    2015: 0.0138, 2016: 0.1196, 2017: 0.2183, 2018: -0.0438, 2019: 0.3149,
-    2020: 0.1840, 2021: 0.2871, 2022: -0.1811, 2023: 0.2629, 2024: 0.1500,
+    2024: 0.20, 2023: 0.2629, 2022: -0.1811, 2021: 0.2871, 2020: 0.1840,
+    2019: 0.3149, 2018: -0.0438, 2017: 0.2183, 2016: 0.1196, 2015: 0.0138,
+    2014: 0.1369, 2013: 0.3239, 2012: 0.1600, 2011: 0.0211, 2010: 0.1506,
+    2009: 0.2646, 2008: -0.3700, 2007: 0.0549, 2006: 0.1579, 2005: 0.0491,
+    2004: 0.1088, 2003: 0.2868, 2002: -0.2210, 2001: -0.1189, 2000: -0.0910,
+    1999: 0.2104, 1998: 0.2858, 1997: 0.3336, 1996: 0.2296, 1995: 0.3758,
+    1994: 0.0132, 1993: 0.1008, 1992: 0.0762, 1991: 0.3047, 1990: -0.0310,
+    1989: 0.3169, 1988: 0.1661, 1987: 0.0525, 1986: 0.1867, 1985: 0.3173
   },
   'QQQ': {
-    2010: 0.1993, 2011: 0.0270, 2012: 0.1682, 2013: 0.3499, 2014: 0.1794,
-    2015: 0.0843, 2016: 0.0592, 2017: 0.3152, 2018: -0.0104, 2019: 0.3796,
-    2020: 0.4758, 2021: 0.2724, 2022: -0.3310, 2023: 0.5381, 2024: 0.1800,
+    2024: 0.20, 2023: 0.5381, 2022: -0.3310, 2021: 0.2724, 2020: 0.4758,
+    2019: 0.3796, 2018: -0.0104, 2017: 0.3152, 2016: 0.0592, 2015: 0.0843,
+    2014: 0.1794, 2013: 0.3499, 2012: 0.1682, 2011: 0.0270, 2010: 0.1993,
+    2009: 0.5354, 2008: -0.4189, 2007: 0.1867, 2006: 0.0727, 2005: 0.0149,
+    2004: 0.1068, 2003: 0.4967, 2002: -0.3758, 2001: -0.3265, 2000: -0.3684,
+    1999: 1.0195, 1998: 0.8530, 1997: 0.2063, 1996: 0.4254, 1995: 0.4254,
+    1994: -0.0080, 1993: 0.1400, 1992: 0.1000, 1991: 0.6500, 1990: -0.1100,
+    1989: 0.2000, 1988: 0.1500, 1987: -0.0500, 1986: 0.0700, 1985: 0.2500
   },
   'SPY': {
-     2010: 0.1506, 2011: 0.0211, 2012: 0.1600, 2013: 0.3239, 2014: 0.1369,
-     2015: 0.0138, 2016: 0.1196, 2017: 0.2183, 2018: -0.0438, 2019: 0.3149,
-     2020: 0.1840, 2021: 0.2871, 2022: -0.1811, 2023: 0.2629, 2024: 0.1500,
+    2024: 0.20, 2023: 0.2629, 2022: -0.1811, 2021: 0.2871, 2020: 0.1840,
+    2019: 0.3149, 2018: -0.0438, 2017: 0.2183, 2016: 0.1196, 2015: 0.0138,
+    2014: 0.1369, 2013: 0.3239, 2012: 0.1600, 2011: 0.0211, 2010: 0.1506,
+    2009: 0.2646, 2008: -0.3700, 2007: 0.0549, 2006: 0.1579, 2005: 0.0491,
+    2004: 0.1088, 2003: 0.2868, 2002: -0.2210, 2001: -0.1189, 2000: -0.0910,
+    1999: 0.2104, 1998: 0.2858, 1997: 0.3336, 1996: 0.2296, 1995: 0.3758,
+    1994: 0.0132, 1993: 0.1008, 1992: 0.0762, 1991: 0.3047, 1990: -0.0310,
+    1989: 0.3169, 1988: 0.1661, 1987: 0.0525, 1986: 0.1867, 1985: 0.3173
   }
 };
 
@@ -79,28 +95,31 @@ export const TRANSLATIONS: Record<Language, any> = {
     appTitle: "US Stock SIP Calculator",
     darkMode: "Dark Mode",
     simulationSettings: "Simulation Settings",
-    fixedRate: "Fixed Rate",
+    fixedRate: "SIP Projection",
     historicalBacktest: "Historical Backtest",
     initialInvestment: "Initial Investment",
     monthlyContribution: "Monthly Contribution",
     duration: "Duration (Years)",
     expectedReturn: "Expected Annual Return (%)",
+    inflationRate: "Inflation Rate (%)",
     startYear: "Start Year",
     portfolioAllocation: "Portfolio Allocation",
     total: "Total",
     addETF: "+ Add Asset",
     reinvestDividends: "Reinvest Dividends",
     reinvestDividendsDesc: "If unchecked, dividends are paid out as cash.",
-    tipsTitle: "Tips",
+    tipsTitle: "Glossary & Tips",
     tipsList: [
       "Use 'Strategies' to auto-fill portfolios.",
-      "You can type custom tickers and set expense ratios manually.",
-      "For custom tickers without historical data, a default growth rate is used in Backtest mode."
+      "Inflation Rate: Simulates purchasing power loss (e.g. 2%/yr).",
+      "Inflation Adj.: 'Real Value' in today's money (Nominal / Inflation).",
+      "Start Year: In Fixed Projection, sets the start of simulation; in Historical, it locks the duration to end today."
     ],
     resultsTitle: "Simulation Results",
     exportPDF: "Print / Save PDF",
     totalInvested: "Total Invested",
     finalValue: "Final Portfolio Value",
+    inflationAdjusted: "Inflation Adj.",
     totalReturn: "Total Return",
     growthProjection: "Growth Projection",
     aiTitle: "Investment Analysis",
@@ -119,34 +138,39 @@ export const TRANSLATIONS: Record<Language, any> = {
     weightedExpense: "Avg Fee",
     netReturn: "Net Return",
     tickerPlaceholder: "Ticker (e.g. VOO)",
-    customTickerWarning: "Note: Custom tickers use proxy data in historical mode if unknown."
+    customTickerWarning: "Note: Custom tickers use proxy data in historical mode if unknown.",
+    yearlyBreakdown: "Yearly Breakdown",
+    yearColumn: "Year"
   },
   zh: {
     appTitle: "美股定投计算器",
     darkMode: "暗黑模式",
     simulationSettings: "模拟设置",
-    fixedRate: "固定收益率",
+    fixedRate: "定投测算",
     historicalBacktest: "历史回测",
     initialInvestment: "初始投入",
     monthlyContribution: "每月定投",
     duration: "定投时长 (年)",
     expectedReturn: "预期年化收益率 (%)",
+    inflationRate: "通货膨胀率 (%)",
     startYear: "开始年份",
     portfolioAllocation: "持仓配置",
     total: "总计",
     addETF: "+ 添加资产",
     reinvestDividends: "红利再投资",
     reinvestDividendsDesc: "若不勾选，股息将作为现金派发。",
-    tipsTitle: "小贴士",
+    tipsTitle: "名词解释与贴士",
     tipsList: [
-      "使用‘策略组合’可快速填充持仓。",
-      "您可以输入自定义代码并手动设置管理费率。",
-      "历史回测模式下，未知代码将使用默认增长率代替。"
+      "通货膨胀率：模拟每年货币贬值幅度（如2%），用于计算真实购买力。",
+      "通胀调整后：即‘真实价值’(Real Value)，剔除通胀水分后在今天的购买力。",
+      "开始年份：定投测算模式下，设定模拟的起点；历史回测模式下，它决定了回测区间（至今日）。",
+      "使用‘策略组合’可快速填充持仓。"
     ],
     resultsTitle: "模拟结果",
     exportPDF: "打印 / 保存 PDF",
     totalInvested: "总投入本金",
     finalValue: "期末总资产",
+    inflationAdjusted: "通胀调整后",
     totalReturn: "总回报率",
     growthProjection: "资产增长曲线",
     aiTitle: "AI 投资分析报告",
@@ -165,34 +189,38 @@ export const TRANSLATIONS: Record<Language, any> = {
     weightedExpense: "平均费率",
     netReturn: "净收益",
     tickerPlaceholder: "代码 (如 VOO)",
-    customTickerWarning: "注意：未知代码在回测中将使用替代数据。"
+    customTickerWarning: "注意：未知代码在回测中将使用替代数据。",
+    yearlyBreakdown: "年度数据明细",
+    yearColumn: "年份"
   },
   ja: {
     appTitle: "米国株積立計算機",
     darkMode: "ダークモード",
     simulationSettings: "シミュレーション設定",
-    fixedRate: "固定金利",
+    fixedRate: "積立シミュレーション",
     historicalBacktest: "過去データ分析",
     initialInvestment: "初期投資額",
     monthlyContribution: "毎月の積立額",
     duration: "期間 (年)",
     expectedReturn: "予想年間収益率 (%)",
+    inflationRate: "インフレ率 (%)",
     startYear: "開始年",
     portfolioAllocation: "ポートフォリオ配分",
     total: "合計",
     addETF: "+ 資産を追加",
     reinvestDividends: "配当金再投資",
     reinvestDividendsDesc: "チェックを外すと、配当金は現金として支払われます。",
-    tipsTitle: "ヒント",
+    tipsTitle: "用語解説とヒント",
     tipsList: [
-      "「戦略」を使用してポートフォリオを自動入力します。",
-      "カスタムティッカーと経費率を手動で入力できます。",
-      "履歴データがない銘柄は、デフォルトの成長率が使用されます。"
+      "インフレ率: 時間の経過に伴う購買力の低下をシミュレートします。",
+      "インフレ調整後: インフレを考慮した後の「実質価値」です。",
+      "開始年: 積立シミュでは開始時点を設定し、過去分析では今日までの期間を決定します。"
     ],
     resultsTitle: "シミュレーション結果",
     exportPDF: "印刷 / PDF保存",
     totalInvested: "総投資額",
     finalValue: "最終評価額",
+    inflationAdjusted: "インフレ調整後",
     totalReturn: "トータルリターン",
     growthProjection: "資産推移",
     aiTitle: "AI投資分析",
@@ -211,6 +239,8 @@ export const TRANSLATIONS: Record<Language, any> = {
     weightedExpense: "平均手数料",
     netReturn: "純収益",
     tickerPlaceholder: "銘柄 (例: VOO)",
-    customTickerWarning: "注: 未知の銘柄は代替データを使用します。"
+    customTickerWarning: "注: 未知の銘柄は代替データを使用します。",
+    yearlyBreakdown: "年間内訳",
+    yearColumn: "年"
   }
 };

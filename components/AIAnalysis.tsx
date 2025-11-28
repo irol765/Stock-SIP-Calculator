@@ -9,7 +9,7 @@ interface AIAnalysisProps {
   t: any; // Translations
 }
 
-// Simple Markdown Parser Component to avoid heavy dependencies
+// Improved Simple Markdown Parser
 const SimpleMarkdown: React.FC<{ content: string }> = ({ content }) => {
   if (!content) return null;
 
@@ -19,64 +19,58 @@ const SimpleMarkdown: React.FC<{ content: string }> = ({ content }) => {
   let inList = false;
 
   lines.forEach((line, index) => {
-    // Headers (###)
-    if (line.startsWith('###')) {
-      formattedElements.push(
-        <h4 key={index} className="text-lg font-bold text-gray-900 dark:text-white mt-6 mb-3 border-b pb-1 print:text-black">
-          {line.replace(/^###\s*/, '')}
-        </h4>
-      );
+    const trimmedLine = line.trim();
+    if (!trimmedLine) {
+        inList = false;
+        return;
+    }
+
+    // Headers (### or ##)
+    if (trimmedLine.startsWith('#')) {
+      const level = trimmedLine.match(/^#+/)?.[0].length || 0;
+      const text = trimmedLine.replace(/^#+\s*/, '');
+      const className = level === 2 
+        ? "text-xl font-bold text-gray-900 dark:text-white mt-6 mb-3 border-b border-gray-200 dark:border-gray-700 pb-2 print:text-black"
+        : "text-lg font-bold text-gray-800 dark:text-gray-100 mt-4 mb-2 print:text-black";
+      
+      formattedElements.push(<div key={index} className={className}>{text}</div>);
       inList = false;
     }
-    else if (line.startsWith('##')) {
-        formattedElements.push(
-          <h3 key={index} className="text-xl font-bold text-gray-900 dark:text-white mt-6 mb-4 print:text-black">
-            {line.replace(/^##\s*/, '')}
-          </h3>
-        );
-        inList = false;
-      }
-    // Bold text (**text**) - Split by double asterisks
-    else if (line.includes('**')) {
-      const parts = line.split(/(\*\*.*?\*\*)/g);
-      const lineContent = parts.map((part, i) => {
+    // List Items (Bullet - or * or Numbered 1.)
+    else if (trimmedLine.match(/^(\-|\*|\d+\.)\s/)) {
+      // Remove the list marker (-, *, 1., 1. -) and any leading weird chars
+      const textContent = trimmedLine.replace(/^(\-|\*|\d+\.)\s+/, '').replace(/^[\-\.]\s*/, '');
+      
+      // Parse Bold inside list
+      const parts = textContent.split(/(\*\*.*?\*\*)/g);
+      const listContent = parts.map((part, i) => {
         if (part.startsWith('**') && part.endsWith('**')) {
           return <strong key={i} className="font-semibold text-gray-900 dark:text-white print:text-black">{part.slice(2, -2)}</strong>;
         }
         return part;
       });
-      
-      // List items with bold text
-      if (line.trim().startsWith('-') || line.trim().startsWith('* ')) {
-         formattedElements.push(
-            <li key={index} className="ml-4 list-disc text-gray-700 dark:text-gray-300 mb-1 print:text-black">
-                <span className="-ml-1">{line.replace(/^[\-\*]\s/, '').split(/(\*\*.*?\*\*)/g).map((p, k) => 
-                    p.startsWith('**') && p.endsWith('**') 
-                    ? <strong key={k} className="font-semibold text-gray-900 dark:text-gray-100 print:text-black">{p.slice(2,-2)}</strong> 
-                    : p
-                )}</span>
-            </li>
-         );
-         inList = true;
-      } else {
-         formattedElements.push(<p key={index} className="mb-2 text-gray-700 dark:text-gray-300 print:text-black">{lineContent}</p>);
-         inList = false;
-      }
-    }
-    // Standard List items
-    else if (line.trim().startsWith('- ') || line.trim().startsWith('* ')) {
+
       formattedElements.push(
-        <li key={index} className="ml-4 list-disc text-gray-700 dark:text-gray-300 mb-1 print:text-black">
-          {line.replace(/^[\-\*]\s*/, '')}
-        </li>
+        <div key={index} className="flex items-start mb-2 pl-2">
+            <span className="mr-2 text-primary-500 mt-1.5 flex-shrink-0 text-[10px]">•</span>
+            <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed print:text-black">{listContent}</p>
+        </div>
       );
       inList = true;
     }
-    // Regular text
-    else if (line.trim() !== '') {
+    // Regular Text / Bold parsing
+    else {
+      const parts = line.split(/(\*\*.*?\*\*)/g);
+      const pContent = parts.map((part, i) => {
+        if (part.startsWith('**') && part.endsWith('**')) {
+          return <strong key={i} className="font-semibold text-gray-900 dark:text-white print:text-black">{part.slice(2, -2)}</strong>;
+        }
+        return part;
+      });
+
       formattedElements.push(
-        <p key={index} className="mb-2 text-gray-700 dark:text-gray-300 leading-relaxed print:text-black">
-          {line}
+        <p key={index} className="mb-3 text-sm text-gray-700 dark:text-gray-300 leading-relaxed print:text-black">
+          {pContent}
         </p>
       );
       inList = false;

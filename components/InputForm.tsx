@@ -15,6 +15,9 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
   const currentExpenseRatio = React.useMemo(() => calculateWeightedExpenseRatio(state.portfolio), [state.portfolio]);
   
   const symbol = CURRENCY_SYMBOLS[state.currency];
+  
+  // Use 2025 as the reference "Now" to match data context
+  const CURRENT_YEAR = 2025;
 
   const handlePortfolioChange = (id: string, field: keyof PortfolioItem, value: any) => {
     const updatedPortfolio = state.portfolio.map(p => {
@@ -64,7 +67,38 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
     });
   };
 
+  const handleModeSwitch = (newMode: 'fixed' | 'historical') => {
+    if (newMode === state.mode) return;
+    
+    if (newMode === 'fixed') {
+      onChange({ mode: newMode, years: 10, startYear: CURRENT_YEAR - 10 });
+    } else {
+      const duration = state.years;
+      const newStartYear = CURRENT_YEAR - duration;
+      onChange({ mode: newMode, startYear: newStartYear, years: duration });
+    }
+  };
+
+  const handleStartYearChange = (year: number) => {
+    if (state.mode === 'historical') {
+       onChange({ startYear: year, years: CURRENT_YEAR - year });
+    } else {
+       onChange({ startYear: year });
+    }
+  };
+
+  const handleDurationChange = (years: number) => {
+    if (state.mode === 'historical') {
+       onChange({ years: years, startYear: CURRENT_YEAR - years });
+    } else {
+       onChange({ years: years });
+    }
+  };
+
   const totalAllocation = state.portfolio.reduce((sum, item) => sum + item.percentage, 0);
+  const maxYears = 40; 
+  const minStartYear = CURRENT_YEAR - maxYears; // 1985
+  const effectiveStartYear = state.startYear || (CURRENT_YEAR - state.years);
 
   return (
     <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 p-6 space-y-8 no-print-section">
@@ -77,13 +111,13 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
         </h3>
         <div className="grid grid-cols-2 gap-4">
           <button
-            onClick={() => onChange({ mode: 'fixed' })}
+            onClick={() => handleModeSwitch('fixed')}
             className={`px-4 py-3 rounded-xl border text-sm font-medium transition-all ${state.mode === 'fixed' ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400' : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
           >
             {t.fixedRate}
           </button>
           <button
-            onClick={() => onChange({ mode: 'historical' })}
+            onClick={() => handleModeSwitch('historical')}
             className={`px-4 py-3 rounded-xl border text-sm font-medium transition-all ${state.mode === 'historical' ? 'border-primary-500 bg-primary-50 dark:bg-primary-900/20 text-primary-700 dark:text-primary-400' : 'border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700'}`}
           >
             {t.historicalBacktest}
@@ -112,29 +146,40 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
           />
         </div>
         
+        {/* Start Year */}
+        <div className="space-y-2">
+           <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.startYear}</label>
+           <select
+              value={effectiveStartYear}
+              onChange={(e) => handleStartYearChange(Number(e.target.value))}
+              className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
+           >
+             {Array.from({ length: 41 }, (_, i) => minStartYear + i).reverse().map(year => (
+               <option key={year} value={year}>{year}</option>
+             ))}
+           </select>
+        </div>
+
+        {/* Duration Slider */}
         <div className="space-y-2">
           <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.duration}</label>
           <input
             type="range"
             min="1"
-            max={state.mode === 'historical' ? 14 : 40}
-            value={state.years}
-            onChange={(e) => onChange({ years: Number(e.target.value) })}
+            max={maxYears}
+            value={Math.min(state.years, maxYears)}
+            onChange={(e) => handleDurationChange(Number(e.target.value))}
             className="w-full h-2 bg-gray-200 dark:bg-gray-600 rounded-lg appearance-none cursor-pointer accent-primary-600"
           />
-          <div className="text-right text-xs text-gray-500 dark:text-gray-400 font-mono">{state.years} {t.yearsSuffix}</div>
+          <div className="text-right text-xs text-gray-500 dark:text-gray-400 font-mono">
+            {Math.min(state.years, maxYears)} {t.yearsSuffix} (Max: {maxYears})
+          </div>
         </div>
 
-        {state.mode === 'fixed' ? (
+        {state.mode === 'fixed' && (
           <div className="space-y-2">
-             <div className="flex justify-between items-center">
+             <div className="flex justify-between items-center h-5">
                <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.expectedReturn}</label>
-               <button 
-                onClick={() => onChange({ annualReturn: Number(currentAvgReturn.toFixed(2)) })}
-                className="text-xs text-primary-500 hover:text-primary-600 underline"
-               >
-                 {t.useThisRate} ({currentAvgReturn.toFixed(1)}%)
-               </button>
              </div>
              <input
               type="number"
@@ -142,24 +187,34 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
               onChange={(e) => onChange({ annualReturn: Number(e.target.value) })}
               className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
              />
-             <p className="text-xs text-gray-500 dark:text-gray-400 flex items-center justify-between">
-               <span>{t.avgReturnNote} {currentAvgReturn.toFixed(2)}%</span>
+             <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+               {t.avgReturnNote} {currentAvgReturn.toFixed(2)}%
+               <button 
+                onClick={() => onChange({ annualReturn: Number(currentAvgReturn.toFixed(2)) })}
+                className="ml-2 text-primary-500 hover:text-primary-600 underline focus:outline-none"
+               >
+                 ({t.useThisRate})
+               </button>
              </p>
           </div>
-        ) : (
-          <div className="space-y-2">
-             <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.startYear}</label>
-             <select
-                value={state.startYear}
-                onChange={(e) => onChange({ startYear: Number(e.target.value) })}
-                className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none"
-             >
-               {Array.from({ length: 14 }, (_, i) => 2010 + i).map(year => (
-                 <option key={year} value={year}>{year}</option>
-               ))}
-             </select>
-          </div>
         )}
+        
+        {/* Inflation Rate Input */}
+        <div className="space-y-2">
+          <div className="flex justify-between items-center h-5">
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">{t.inflationRate}</label>
+          </div>
+          <input
+            type="number"
+            step="0.1"
+            value={state.inflationRate}
+            onChange={(e) => onChange({ inflationRate: Number(e.target.value) })}
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary-500 focus:border-transparent outline-none transition-shadow"
+          />
+          {state.mode === 'fixed' && (
+            <div className="text-xs opacity-0 select-none pointer-events-none" aria-hidden="true">Spacer</div>
+          )}
+        </div>
       </div>
 
       {/* Dividend Reinvestment Toggle */}
@@ -224,7 +279,7 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
                    list="tickers-list"
                    value={item.ticker}
                    onChange={(e) => handlePortfolioChange(item.id, 'ticker', e.target.value.toUpperCase())}
-                   placeholder={t.tickerPlaceholder}
+                   placeholder={t.tickerPlaceholder || "Type/Select"}
                    className="w-full px-2 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 outline-none uppercase"
                  />
                </div>
@@ -243,7 +298,7 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
                   <span className="absolute right-2 top-2 text-gray-400 text-xs pointer-events-none">%</span>
                </div>
 
-               {/* Expense Ratio Input */}
+               {/* Expense Ratio Input - Fixed Overlap */}
                <div className="col-span-3 relative">
                  <input
                     type="number"
@@ -251,10 +306,11 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
                     step="0.01"
                     value={item.expenseRatio}
                     onChange={(e) => handlePortfolioChange(item.id, 'expenseRatio', Number(e.target.value))}
-                    className="w-full px-2 py-2 pr-8 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-xs focus:ring-2 focus:ring-primary-500 outline-none text-right"
-                    placeholder={t.expenseRatio}
+                    className="w-full px-2 py-2 pr-6 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-xs focus:ring-2 focus:ring-primary-500 outline-none text-right"
+                    placeholder="Fee"
+                    title={t.expenseRatio}
                   />
-                  <span className="absolute right-2 top-2.5 text-gray-400 text-[10px] pointer-events-none whitespace-nowrap">Fee %</span>
+                  <span className="absolute right-2 top-2.5 text-gray-400 text-[10px] pointer-events-none">%</span>
                </div>
 
                {/* Delete Button */}

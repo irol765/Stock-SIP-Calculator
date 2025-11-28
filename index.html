@@ -31,7 +31,7 @@
       @media print {
         @page {
           size: A4;
-          margin: 0; /* Control margin manually per section */
+          margin: 0;
         }
         
         body {
@@ -39,6 +39,7 @@
           color: #111 !important;
           -webkit-print-color-adjust: exact !important;
           print-color-adjust: exact !important;
+          font-family: 'Inter', sans-serif;
         }
         
         /* Universal Hide */
@@ -53,79 +54,81 @@
         }
 
         /* Layout overrides */
-        #root {
-            width: 100%;
-        }
-        .lg\:col-span-8 {
-          width: 100% !important;
-          grid-column: span 12 !important;
-        }
-        .max-w-7xl {
-          max-width: 100% !important;
-          padding: 0 !important;
-          margin: 0 !important;
-        }
+        #root { width: 100%; }
+        .lg\:col-span-8 { width: 100% !important; grid-column: span 12 !important; }
+        .max-w-7xl { max-width: 100% !important; padding: 0 !important; margin: 0 !important; }
 
         /* Page 1: Cover */
         .print-cover-page {
           display: flex !important;
           flex-direction: column;
           justify-content: center;
-          align-items: center;
-          height: 100vh;
+          /* Use strict height to ensure single page */
+          height: 297mm; /* A4 height */
           width: 100%;
-          page-break-after: always;
-          padding: 40px;
+          padding: 60px;
           background: white;
           position: relative;
+          break-after: page; /* Force break after cover */
+          box-sizing: border-box;
+        }
+        
+        /* Cover Decorative Element */
+        .print-cover-page::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 12px;
+            background-color: #0284c7; /* Primary 600 */
         }
 
         /* Page 2: Charts/Stats */
         .print-page-2 {
             padding: 40px;
-            page-break-after: always;
-            min-height: 100vh;
+            break-after: page; /* Force break after charts */
+            min-height: 90vh; /* Ensure it takes up space */
+            box-sizing: border-box;
         }
 
         /* Page 3: AI Report */
         .print-page-3 {
             padding: 40px;
-            page-break-before: always;
-            min-height: 100vh;
+            break-before: page;
+            min-height: 50vh;
+            box-sizing: border-box;
         }
 
         /* Styling enhancements for print */
         .bg-white, .dark\:bg-gray-800 {
           background-color: white !important;
-          border: 1px solid #ddd !important;
+          border: none !important; /* Remove card borders for cleaner print */
           box-shadow: none !important;
           color: black !important;
         }
 
+        /* Typography */
+        h1 { font-size: 3rem !important; line-height: 1.1 !important; }
+        h2 { font-size: 2rem !important; margin-bottom: 1.5rem !important; border-bottom: 2px solid #eee; padding-bottom: 0.5rem; }
+        p { font-size: 14px !important; }
+
         /* Recharts Fixes */
-        .recharts-text { fill: #000 !important; }
+        .recharts-text { fill: #000 !important; font-size: 10px !important; }
         .recharts-cartesian-grid line { stroke: #ccc !important; opacity: 0.5 !important; }
         .recharts-curve { stroke-width: 2px !important; }
         
         /* Text Color Fixes */
         .text-gray-900, .dark\:text-white { color: #000 !important; }
-        .text-gray-500, .dark\:text-gray-400 { color: #444 !important; }
+        .text-gray-500, .dark\:text-gray-400 { color: #555 !important; }
         .text-primary-600, .dark\:text-primary-400 { color: #0284c7 !important; }
         .prose, .dark\:prose-invert { color: #000 !important; }
         
-        /* Ensure elements inside cards break nicely if needed */
-        .print-break-inside {
-          break-inside: avoid;
-        }
+        .print-break-inside { break-inside: avoid; margin-bottom: 2rem; }
       }
       
       /* Hide print-specific sections on screen */
-      .print-cover-page {
-        display: none;
-      }
-      .print-footer-container {
-        display: none; /* Only show on print pages if needed, but handled by page structure */
-      }
+      .print-cover-page { display: none; }
     </style>
 <script type="importmap">
 {

@@ -10,6 +10,7 @@ export interface SimulationResult {
   invested: number;
   value: number;
   growth: number;
+  inflationAdjustedValue: number;
 }
 
 export type SimulationMode = 'fixed' | 'historical';

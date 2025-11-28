@@ -1,0 +1,10 @@
+node_modules
+dist
+.git
+.env
+.DS_Store
+Dockerfile
+docker-entrypoint.sh
+nginx.conf
+README.md
+*.md

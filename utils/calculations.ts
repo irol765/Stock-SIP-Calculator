@@ -46,6 +46,7 @@ export const calculateSIP = (state: CalculatorState): SimulationResult[] => {
   
   const monthlyContrib = state.monthlyContribution;
   const startYear = state.startYear || 2010;
+  const inflationRate = state.inflationRate || 0;
   
   // Calculate weighted expense ratio for the portfolio based on individual items
   const weightedExpenseRatio = calculateWeightedExpenseRatio(state.portfolio);
@@ -59,7 +60,8 @@ export const calculateSIP = (state: CalculatorState): SimulationResult[] => {
         year: currentYear,
         invested: totalInvested,
         value: currentValue,
-        growth: 0
+        growth: 0,
+        inflationAdjustedValue: currentValue
       });
       continue;
     }
@@ -118,11 +120,17 @@ export const calculateSIP = (state: CalculatorState): SimulationResult[] => {
     currentValue = yearStartValue;
     totalInvested += yearInvested;
 
+    // Calculate Inflation Adjusted Value (Real Value)
+    // Formula: RealValue = NominalValue / (1 + inflation)^years
+    const discountFactor = Math.pow(1 + inflationRate / 100, yearOffset);
+    const realValue = currentValue / discountFactor;
+
     results.push({
       year: currentYear,
       invested: totalInvested,
       value: currentValue,
-      growth: currentValue - totalInvested
+      growth: currentValue - totalInvested,
+      inflationAdjustedValue: realValue
     });
   }
 

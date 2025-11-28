@@ -24,36 +24,36 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ results, state, 
       {/* PAGE 1: COVER PAGE (Print Only) */}
       <div className="print-cover-page">
           <div className="w-full pl-8">
-             <div className="mb-2 text-primary-600 font-bold tracking-wider uppercase text-sm">Investment Report</div>
+             <div className="mb-2 text-primary-600 font-bold tracking-wider uppercase text-sm">{t.reportTitle}</div>
              <h1 className="text-6xl font-extrabold text-gray-900 mb-6 tracking-tight leading-tight">
-               {state.years} {t.yearsSuffix}<br/>Investment Plan
+               {state.years} {t.yearsSuffix}<br/>{t.investmentPlan}
              </h1>
              <p className="text-2xl text-gray-500 font-light mb-12">
-               SIP Strategy Simulation & Analysis
+               {t.sipStrategy}
              </p>
 
              <div className="grid grid-cols-2 gap-12 border-t border-gray-200 pt-12">
                 <div>
-                   <p className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-2">Prepared For</p>
-                   <p className="text-xl font-semibold text-gray-800">Client / Investor</p>
+                   <p className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-2">{t.preparedFor}</p>
+                   <p className="text-xl font-semibold text-gray-800">{t.investor}</p>
                 </div>
                 <div>
-                   <p className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-2">Generated On</p>
+                   <p className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-2">{t.generatedOn}</p>
                    <p className="text-xl font-semibold text-gray-800">{today}</p>
                 </div>
                 <div>
-                   <p className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-2">Total Investment</p>
+                   <p className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-2">{t.totalInvested}</p>
                    <p className="text-xl font-semibold text-gray-800">{formatCurrency(finalResult.invested)}</p>
                 </div>
                 <div>
-                   <p className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-2">Proj. Final Value</p>
+                   <p className="text-gray-400 uppercase text-xs font-bold tracking-widest mb-2">{t.finalValue}</p>
                    <p className="text-xl font-semibold text-primary-600">{formatCurrency(finalResult.value)}</p>
                 </div>
              </div>
           </div>
           
           <div className="absolute bottom-12 left-0 w-full text-center text-gray-400 text-xs">
-             CONFIDENTIAL - Generated via SIP Calculator
+             {t.confidential}
           </div>
       </div>
 
@@ -63,7 +63,7 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ results, state, 
         {/* Print Header for Page 2 */}
         <div className="hidden print:block mb-8 pb-4 border-b border-gray-200">
            <div className="flex justify-between items-end">
-             <h2 className="text-3xl font-bold text-gray-900 m-0 border-none p-0">Analysis Data</h2>
+             <h2 className="text-3xl font-bold text-gray-900 m-0 border-none p-0">{t.analysisData}</h2>
              <span className="text-gray-400 text-sm">Page 2</span>
            </div>
         </div>
@@ -164,11 +164,11 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ results, state, 
 
         {/* Parameters Summary (for Page 2 Reference) */}
         <div className="hidden print:block mt-8 pt-8 border-t border-gray-100">
-           <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4">Configuration</h4>
+           <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4">{t.configTitle}</h4>
            <div className="flex space-x-8 text-sm">
-               <div><span className="text-gray-500">Monthly:</span> <span className="font-semibold">{formatCurrency(state.monthlyContribution)}</span></div>
-               <div><span className="text-gray-500">Duration:</span> <span className="font-semibold">{state.years} {t.yearsSuffix}</span></div>
-               <div><span className="text-gray-500">Start:</span> <span className="font-semibold">{state.startYear || 'N/A'}</span></div>
+               <div><span className="text-gray-500">{t.monthlyContribution}:</span> <span className="font-semibold">{formatCurrency(state.monthlyContribution)}</span></div>
+               <div><span className="text-gray-500">{t.duration}:</span> <span className="font-semibold">{state.years} {t.yearsSuffix}</span></div>
+               <div><span className="text-gray-500">{t.startYear}:</span> <span className="font-semibold">{state.startYear || 'N/A'}</span></div>
            </div>
         </div>
       </div>
@@ -177,7 +177,7 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ results, state, 
       <div className="hidden print:block pt-8" style={{ pageBreakBefore: 'always' }}>
          <div className="flex justify-between items-end mb-6 border-b border-gray-200 pb-4">
              <h2 className="text-2xl font-bold text-gray-900 m-0">{t.yearlyBreakdown}</h2>
-             <span className="text-gray-400 text-sm">Appendix</span>
+             <span className="text-gray-400 text-sm">{t.appendix}</span>
          </div>
          
          <table className="w-full text-sm text-left border-collapse">

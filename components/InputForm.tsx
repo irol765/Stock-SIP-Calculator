@@ -249,13 +249,13 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
          
          {/* Strategy Buttons */}
          <div className="flex gap-2">
-            <button onClick={() => applyPreset('conservative')} className="flex-1 py-2 px-1 text-xs sm:text-sm bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors">
+            <button onClick={() => applyPreset('conservative')} className="flex-1 h-10 px-1 text-xs sm:text-sm bg-green-50 dark:bg-green-900/20 text-green-700 dark:text-green-300 border border-green-200 dark:border-green-800 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-colors">
               {t.conservative}
             </button>
-            <button onClick={() => applyPreset('balanced')} className="flex-1 py-2 px-1 text-xs sm:text-sm bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
+            <button onClick={() => applyPreset('balanced')} className="flex-1 h-10 px-1 text-xs sm:text-sm bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors">
               {t.balanced}
             </button>
-            <button onClick={() => applyPreset('aggressive')} className="flex-1 py-2 px-1 text-xs sm:text-sm bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors">
+            <button onClick={() => applyPreset('aggressive')} className="flex-1 h-10 px-1 text-xs sm:text-sm bg-purple-50 dark:bg-purple-900/20 text-purple-700 dark:text-purple-300 border border-purple-200 dark:border-purple-800 rounded-lg hover:bg-purple-100 dark:hover:bg-purple-900/30 transition-colors">
               {t.aggressive}
             </button>
          </div>
@@ -280,37 +280,37 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
                    value={item.ticker}
                    onChange={(e) => handlePortfolioChange(item.id, 'ticker', e.target.value.toUpperCase())}
                    placeholder={t.tickerPlaceholder || "Type/Select"}
-                   className="w-full px-2 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 outline-none uppercase"
+                   className="w-full h-10 px-3 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 outline-none uppercase"
                  />
                </div>
 
                {/* Percentage Input */}
-               <div className="col-span-3 relative">
+               <div className="col-span-3 relative h-10">
                   <input
                     type="number"
                     min="0"
                     max="100"
                     value={item.percentage}
                     onChange={(e) => handlePortfolioChange(item.id, 'percentage', Number(e.target.value))}
-                    className="w-full px-2 py-2 pr-6 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 outline-none text-right"
+                    className="w-full h-full px-3 pr-7 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 outline-none text-right"
                     placeholder="%"
                   />
-                  <span className="absolute right-2 top-2 text-gray-400 text-xs pointer-events-none">%</span>
+                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">%</span>
                </div>
 
-               {/* Expense Ratio Input - Fixed Overlap */}
-               <div className="col-span-3 relative">
+               {/* Expense Ratio Input - Unified Height & Font */}
+               <div className="col-span-3 relative h-10">
                  <input
                     type="number"
                     min="0"
                     step="0.01"
                     value={item.expenseRatio}
                     onChange={(e) => handlePortfolioChange(item.id, 'expenseRatio', Number(e.target.value))}
-                    className="w-full px-2 py-2 pr-6 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-xs focus:ring-2 focus:ring-primary-500 outline-none text-right"
+                    className="w-full h-full px-3 pr-7 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 outline-none text-right"
                     placeholder="Fee"
                     title={t.expenseRatio}
                   />
-                  <span className="absolute right-2 top-2.5 text-gray-400 text-[10px] pointer-events-none">%</span>
+                  <span className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none">%</span>
                </div>
 
                {/* Delete Button */}

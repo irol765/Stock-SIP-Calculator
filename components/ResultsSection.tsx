@@ -60,10 +60,10 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ results, state, 
       </div>
 
       {/* PAGE 2: DATA & CHARTS */}
-      <div className="space-y-6 print:space-y-4 print-page-2">
+      <div className="space-y-6 print:space-y-3 print-page-2">
         
         {/* Print Header for Page 2 */}
-        <div className="hidden print:block mb-8 print:mb-4 pb-4 border-b border-gray-200">
+        <div className="hidden print:block mb-8 print:mb-2 pb-4 print:pb-2 border-b border-gray-200">
            <div className="flex justify-between items-end">
              <h2 className="text-3xl font-bold text-gray-900 m-0 border-none p-0">{t.analysisData}</h2>
              <span className="text-gray-400 text-sm">Page 2</span>
@@ -71,24 +71,24 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ results, state, 
         </div>
 
         {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 gap-4">
-          <div className="bg-white dark:bg-gray-800 p-6 print:p-4 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 print-break-inside">
+        <div className="grid grid-cols-1 md:grid-cols-3 print:grid-cols-3 gap-4 print:gap-3">
+          <div className="bg-white dark:bg-gray-800 p-6 print:p-3 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 print-break-inside">
             <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{t.totalInvested}</p>
-            <p className="text-2xl font-bold text-gray-900 dark:text-white mt-2">{formatCurrency(finalResult.invested)}</p>
+            <p className="text-2xl print:text-xl font-bold text-gray-900 dark:text-white mt-2">{formatCurrency(finalResult.invested)}</p>
           </div>
-          <div className="bg-white dark:bg-gray-800 p-6 print:p-4 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 print-break-inside relative overflow-hidden">
+          <div className="bg-white dark:bg-gray-800 p-6 print:p-3 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 print-break-inside relative overflow-hidden">
             <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{t.finalValue}</p>
-            <p className="text-2xl font-bold text-primary-600 dark:text-primary-400 mt-2">{formatCurrency(finalResult.value)}</p>
+            <p className="text-2xl print:text-xl font-bold text-primary-600 dark:text-primary-400 mt-2">{formatCurrency(finalResult.value)}</p>
             {/* Real Value (Inflation Adjusted) */}
             <div className="mt-1 flex items-center text-xs text-gray-500 dark:text-gray-400" title={t.inflationAdjusted}>
                 <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" /></svg>
                 {t.inflationAdjusted}: {formatCurrency(finalResult.inflationAdjustedValue)}
             </div>
           </div>
-          <div className="bg-white dark:bg-gray-800 p-6 print:p-4 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 print-break-inside">
+          <div className="bg-white dark:bg-gray-800 p-6 print:p-3 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 print-break-inside">
             <p className="text-sm font-medium text-gray-500 dark:text-gray-400">{t.totalReturn}</p>
             <div className="flex items-baseline mt-2 space-x-2">
-               <p className={`text-2xl font-bold ${totalGain >= 0 ? 'text-green-500' : 'text-red-500'}`}>
+               <p className={`text-2xl print:text-xl font-bold ${totalGain >= 0 ? 'text-green-500' : 'text-red-500'}`}>
                  {totalReturnPercent.toFixed(2)}%
                </p>
                <span className="text-sm text-gray-500">({formatCurrency(totalGain)})</span>
@@ -97,11 +97,11 @@ export const ResultsSection: React.FC<ResultsSectionProps> = ({ results, state, 
         </div>
 
         {/* Chart */}
-        <div className="bg-white dark:bg-gray-800 p-6 print:p-4 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 print-break-inside">
+        <div className="bg-white dark:bg-gray-800 p-6 print:p-3 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 print-break-inside">
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-6 print:mb-2">{t.growthProjection}</h3>
-          <div className="h-[400px] print:h-[250px] w-full">
+          <div className="h-[400px] print:h-[220px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={results} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
+              <AreaChart data={results} margin={{ top: 10, right: 15, left: 0, bottom: 0 }}>
                 <defs>
                   <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="#0ea5e9" stopOpacity={0.3}/>

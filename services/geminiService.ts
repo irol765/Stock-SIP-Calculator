@@ -25,30 +25,36 @@ export const generateInvestmentReport = async (
   if (language === 'zh') langName = "Simplified Chinese (简体中文)";
   if (language === 'ja') langName = "Japanese (日本語)";
 
-  const prompt = `
-    Act as a professional financial advisor. Analyze the following systematic investment plan (SIP) simulation and generate a concise, professional report suitable for a PDF export.
+  const portfolioDesc = state.portfolio.map(p => `${p.ticker} (${p.percentage}%, Exp: ${p.expenseRatio}%)`).join(', ');
 
-    **Investment Details:**
-    - Currency: ${state.currency}
-    - Monthly Contribution: ${formatMoney(state.monthlyContribution)}
-    - Initial Investment: ${formatMoney(state.initialInvestment)}
-    - Duration: ${state.years} years
-    - Mode: ${state.mode === 'historical' ? 'Historical Backtest' : 'Projected Fixed Rate'}
-    - Reinvest Dividends: ${state.reinvestDividends ? 'Yes' : 'No (Cash Payout)'}
-    - Portfolio: ${state.portfolio.map(p => `${p.ticker} (${p.percentage}%)`).join(', ')}
+  const prompt = `
+    Act as a senior financial analyst. Generate a strictly structured investment report. 
     
-    **Simulation Results:**
+    **Inputs:**
+    - Strategy: ${state.mode === 'historical' ? 'Historical Backtest' : 'Fixed Rate Projection'}
+    - Portfolio: ${portfolioDesc}
+    - Duration: ${state.years} years
+    - Monthly Contribution: ${formatMoney(state.monthlyContribution)}
     - Total Invested: ${formatMoney(finalResult.invested)}
-    - Final Portfolio Value: ${formatMoney(finalResult.value)}
+    - Final Value: ${formatMoney(finalResult.value)}
     - Total Return: ${totalReturnPercent.toFixed(2)}%
 
-    **Requirements:**
-    1. Summarize the growth strategy.
-    2. Comment on the risk profile based on the selected ETFs (e.g., QQQ is tech-heavy/volatile, VOO is broad market).
-    3. Provide a brief outlook or advice on holding this portfolio long-term, considering the currency ${state.currency} and typical expense ratios.
-    4. Keep it concise (under 300 words).
-    5. Format with clear headings using Markdown.
-    6. **IMPORTANT**: Output the response strictly in ${langName}.
+    **Output Rules:**
+    1. Write strictly in ${langName}.
+    2. Do NOT repeat facts or sentences. Be concise.
+    3. Do NOT output duplicate content.
+    4. Use Markdown for formatting (headers as ###, bold as **).
+
+    **Output Structure (3 Distinct Sections):**
+
+    ### 1. Strategy Summary
+    Briefly explain the portfolio composition and the financial result.
+
+    ### 2. Risk & Fee Analysis
+    Analyze the risk profile of the assets and the impact of the management fees (expense ratios) on the final wealth.
+
+    ### 3. Professional Outlook
+    Provide a professional opinion on holding this specific portfolio for ${state.years} years.
   `;
 
   try {

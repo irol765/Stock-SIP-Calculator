@@ -22,7 +22,7 @@ const SimpleMarkdown: React.FC<{ content: string }> = ({ content }) => {
     // Headers (###)
     if (line.startsWith('###')) {
       formattedElements.push(
-        <h4 key={index} className="text-md font-bold text-gray-900 dark:text-white mt-4 mb-2 print:text-black">
+        <h4 key={index} className="text-lg font-bold text-gray-900 dark:text-white mt-6 mb-3 border-b pb-1 print:text-black">
           {line.replace(/^###\s*/, '')}
         </h4>
       );
@@ -30,7 +30,7 @@ const SimpleMarkdown: React.FC<{ content: string }> = ({ content }) => {
     }
     else if (line.startsWith('##')) {
         formattedElements.push(
-          <h3 key={index} className="text-lg font-bold text-gray-900 dark:text-white mt-5 mb-3 print:text-black">
+          <h3 key={index} className="text-xl font-bold text-gray-900 dark:text-white mt-6 mb-4 print:text-black">
             {line.replace(/^##\s*/, '')}
           </h3>
         );
@@ -50,8 +50,6 @@ const SimpleMarkdown: React.FC<{ content: string }> = ({ content }) => {
       if (line.trim().startsWith('-') || line.trim().startsWith('* ')) {
          formattedElements.push(
             <li key={index} className="ml-4 list-disc text-gray-700 dark:text-gray-300 mb-1 print:text-black">
-                {lineContent.slice(1) /* rudimentary slice to remove the dash/star if it was parsed as string */}
-                {/* A safer way for mixed content: */}
                 <span className="-ml-1">{line.replace(/^[\-\*]\s/, '').split(/(\*\*.*?\*\*)/g).map((p, k) => 
                     p.startsWith('**') && p.endsWith('**') 
                     ? <strong key={k} className="font-semibold text-gray-900 dark:text-gray-100 print:text-black">{p.slice(2,-2)}</strong> 
@@ -101,51 +99,59 @@ export const AIAnalysis: React.FC<AIAnalysisProps> = ({ state, results, language
   };
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700 print-break-inside mt-6">
-      <div className="flex justify-between items-center mb-4 no-print">
-         <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
-           <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text mr-2">AI</span> 
-           {t.aiTitle}
-         </h3>
-         {!report && (
-           <button
-            onClick={handleGenerate}
-            disabled={loading}
-            className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium rounded-lg hover:shadow-lg transition-all disabled:opacity-50 flex items-center"
-           >
-             {loading ? (
-               <>
-                 <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-                 {t.generating}
-               </>
-             ) : (
-               t.generateReport
+    <div className={`mt-6 ${report ? 'print-page-3' : ''}`}>
+        
+      {/* Screen Card Container / Print Transparent Container */}
+      <div className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-sm border border-gray-200 dark:border-gray-700">
+          <div className="flex justify-between items-center mb-4 no-print">
+             <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center">
+               <span className="bg-gradient-to-r from-blue-500 to-purple-500 text-transparent bg-clip-text mr-2">AI</span> 
+               {t.aiTitle}
+             </h3>
+             {!report && (
+               <button
+                onClick={handleGenerate}
+                disabled={loading}
+                className="px-4 py-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-sm font-medium rounded-lg hover:shadow-lg transition-all disabled:opacity-50 flex items-center"
+               >
+                 {loading ? (
+                   <>
+                     <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
+                     {t.generating}
+                   </>
+                 ) : (
+                   t.generateReport
+                 )}
+               </button>
              )}
-           </button>
-         )}
+          </div>
+    
+          {/* Print-only title for the section (Page 3 Header) */}
+          {report && (
+              <div className="hidden print:block mb-8 border-b-2 border-gray-200 pb-4">
+                  <h2 className="text-2xl font-bold text-gray-900">Professional Assessment</h2>
+              </div>
+          )}
+    
+          {report && (
+            <div className="prose dark:prose-invert max-w-none">
+               <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl text-sm leading-relaxed text-gray-700 dark:text-gray-300 print:bg-transparent print:p-0 print:text-base">
+                 <SimpleMarkdown content={report} />
+               </div>
+               <div className="mt-4 flex justify-end no-print">
+                 <button onClick={() => setReport(null)} className="text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 underline">
+                   {t.clearReport}
+                 </button>
+               </div>
+            </div>
+          )}
+          
+          {!report && !loading && (
+            <p className="text-sm text-gray-500 dark:text-gray-400 italic no-print">
+              {t.aiPromptHelp}
+            </p>
+          )}
       </div>
-
-      {/* Print-only title for the section */}
-      {report && <h3 className="hidden print:block text-lg font-bold mb-4 border-b pb-2">Investment Strategy Analysis Report</h3>}
-
-      {report && (
-        <div className="prose dark:prose-invert max-w-none">
-           <div className="p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl text-sm leading-relaxed text-gray-700 dark:text-gray-300">
-             <SimpleMarkdown content={report} />
-           </div>
-           <div className="mt-4 flex justify-end no-print">
-             <button onClick={() => setReport(null)} className="text-xs text-gray-500 hover:text-gray-700 dark:hover:text-gray-300 underline">
-               {t.clearReport}
-             </button>
-           </div>
-        </div>
-      )}
-      
-      {!report && !loading && (
-        <p className="text-sm text-gray-500 dark:text-gray-400 italic no-print">
-          {t.aiPromptHelp}
-        </p>
-      )}
     </div>
   );
 };

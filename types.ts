@@ -2,6 +2,7 @@ export interface PortfolioItem {
   id: string;
   ticker: string;
   percentage: number;
+  expenseRatio: number; // Percentage, e.g., 0.03 for 0.03%
 }
 
 export interface SimulationResult {

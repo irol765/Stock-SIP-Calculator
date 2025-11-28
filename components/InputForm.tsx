@@ -1,6 +1,6 @@
 import React from 'react';
 import { CalculatorState, PortfolioItem, RiskLevel } from '../types';
-import { AVAILABLE_TICKERS, COLORS, PORTFOLIO_PRESETS, CURRENCY_SYMBOLS } from '../constants';
+import { COMMON_TICKERS, COLORS, PORTFOLIO_PRESETS, CURRENCY_SYMBOLS, DEFAULT_EXPENSE_RATIOS } from '../constants';
 import { calculateHistoricalAverage, calculateWeightedExpenseRatio } from '../utils/calculations';
 
 interface InputFormProps {
@@ -19,6 +19,11 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
   const handlePortfolioChange = (id: string, field: keyof PortfolioItem, value: any) => {
     const updatedPortfolio = state.portfolio.map(p => {
       if (p.id === id) {
+        // If changing ticker, try to autofill expense ratio if we know it
+        if (field === 'ticker') {
+           const defaultExp = DEFAULT_EXPENSE_RATIOS[value] !== undefined ? DEFAULT_EXPENSE_RATIOS[value] : p.expenseRatio;
+           return { ...p, ticker: value, expenseRatio: defaultExp };
+        }
         return { ...p, [field]: value };
       }
       return p;
@@ -27,11 +32,12 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
   };
 
   const addPortfolioItem = () => {
-    if (state.portfolio.length >= 5) return;
+    if (state.portfolio.length >= 8) return;
     const newItem: PortfolioItem = {
       id: Math.random().toString(36).substr(2, 9),
-      ticker: AVAILABLE_TICKERS[0],
-      percentage: 0
+      ticker: COMMON_TICKERS[0],
+      percentage: 0,
+      expenseRatio: DEFAULT_EXPENSE_RATIOS[COMMON_TICKERS[0]] || 0.03
     };
     onChange({ portfolio: [...state.portfolio, newItem] });
   };
@@ -182,7 +188,7 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
          <div className="flex justify-between items-center">
             <h3 className="text-lg font-semibold text-gray-900 dark:text-white">{t.strategies} / {t.portfolioAllocation}</h3>
             <span className="text-xs text-orange-500 bg-orange-50 dark:bg-orange-900/20 px-2 py-1 rounded">
-               {t.expenseRatio}: {(currentExpenseRatio * 100).toFixed(2)}%
+               {t.weightedExpense}: {(currentExpenseRatio * 100).toFixed(2)}%
             </span>
          </div>
          
@@ -199,32 +205,67 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
             </button>
          </div>
 
+         {/* Datalist for suggestions */}
+         <datalist id="tickers-list">
+             {COMMON_TICKERS.map(tic => <option key={tic} value={tic} />)}
+         </datalist>
+
          <div className="space-y-3 mt-4">
            {state.portfolio.map((item, idx) => (
-             <div key={item.id} className="flex items-center space-x-2">
-               <div className="w-1 h-8 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }}></div>
-               <select
-                 value={item.ticker}
-                 onChange={(e) => handlePortfolioChange(item.id, 'ticker', e.target.value)}
-                 className="flex-1 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 outline-none"
-               >
-                 {AVAILABLE_TICKERS.map(t => <option key={t} value={t}>{t}</option>)}
-               </select>
-               <input
-                 type="number"
-                 min="0"
-                 max="100"
-                 value={item.percentage}
-                 onChange={(e) => handlePortfolioChange(item.id, 'percentage', Number(e.target.value))}
-                 className="w-24 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 outline-none"
-                 placeholder="%"
-               />
-               <button
-                 onClick={() => removePortfolioItem(item.id)}
-                 className="p-2 text-gray-400 hover:text-red-500 transition-colors"
-               >
-                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
-               </button>
+             <div key={item.id} className="grid grid-cols-12 gap-2 items-center">
+               {/* Color Bar */}
+               <div className="col-span-1 flex justify-center">
+                 <div className="w-1.5 h-8 rounded-full" style={{ backgroundColor: COLORS[idx % COLORS.length] }}></div>
+               </div>
+               
+               {/* Ticker Input */}
+               <div className="col-span-4">
+                 <input
+                   list="tickers-list"
+                   value={item.ticker}
+                   onChange={(e) => handlePortfolioChange(item.id, 'ticker', e.target.value.toUpperCase())}
+                   placeholder={t.tickerPlaceholder}
+                   className="w-full px-2 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 outline-none uppercase"
+                 />
+               </div>
+
+               {/* Percentage Input */}
+               <div className="col-span-3 relative">
+                  <input
+                    type="number"
+                    min="0"
+                    max="100"
+                    value={item.percentage}
+                    onChange={(e) => handlePortfolioChange(item.id, 'percentage', Number(e.target.value))}
+                    className="w-full px-2 py-2 pr-6 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-sm focus:ring-2 focus:ring-primary-500 outline-none text-right"
+                    placeholder="%"
+                  />
+                  <span className="absolute right-2 top-2 text-gray-400 text-xs pointer-events-none">%</span>
+               </div>
+
+               {/* Expense Ratio Input */}
+               <div className="col-span-3 relative">
+                 <input
+                    type="number"
+                    min="0"
+                    step="0.01"
+                    value={item.expenseRatio}
+                    onChange={(e) => handlePortfolioChange(item.id, 'expenseRatio', Number(e.target.value))}
+                    className="w-full px-2 py-2 pr-8 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white text-xs focus:ring-2 focus:ring-primary-500 outline-none text-right"
+                    placeholder={t.expenseRatio}
+                  />
+                  <span className="absolute right-2 top-2.5 text-gray-400 text-[10px] pointer-events-none whitespace-nowrap">Fee %</span>
+               </div>
+
+               {/* Delete Button */}
+               <div className="col-span-1 flex justify-end">
+                 <button
+                   onClick={() => removePortfolioItem(item.id)}
+                   className="p-1.5 text-gray-400 hover:text-red-500 transition-colors"
+                 >
+                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                 </button>
+               </div>
              </div>
            ))}
          </div>
@@ -235,7 +276,7 @@ export const InputForm: React.FC<InputFormProps> = ({ state, onChange, t }) => {
             </span>
              <button
                onClick={addPortfolioItem}
-               disabled={state.portfolio.length >= 5}
+               disabled={state.portfolio.length >= 8}
                className="text-sm text-primary-600 hover:text-primary-700 font-medium"
              >
                {t.addETF}

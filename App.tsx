@@ -24,7 +24,7 @@ const App = () => {
     reinvestDividends: true,
     currency: 'USD',
     portfolio: [
-      { id: '1', ticker: 'VOO', percentage: 100 }
+      { id: '1', ticker: 'VOO', percentage: 100, expenseRatio: 0.03 }
     ]
   });
 

@@ -31,7 +31,7 @@
       @media print {
         @page {
           size: A4;
-          margin: 15mm 15mm;
+          margin: 0; /* Control margin manually per section */
         }
         
         body {
@@ -41,7 +41,7 @@
           print-color-adjust: exact !important;
         }
         
-        /* Hide UI elements */
+        /* Universal Hide */
         .no-print, 
         .no-print-section,
         header,
@@ -53,89 +53,78 @@
         }
 
         /* Layout overrides */
+        #root {
+            width: 100%;
+        }
         .lg\:col-span-8 {
           width: 100% !important;
           grid-column: span 12 !important;
         }
-        
         .max-w-7xl {
           max-width: 100% !important;
           padding: 0 !important;
           margin: 0 !important;
         }
 
-        /* Card Styling for Print */
+        /* Page 1: Cover */
+        .print-cover-page {
+          display: flex !important;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+          width: 100%;
+          page-break-after: always;
+          padding: 40px;
+          background: white;
+          position: relative;
+        }
+
+        /* Page 2: Charts/Stats */
+        .print-page-2 {
+            padding: 40px;
+            page-break-after: always;
+            min-height: 100vh;
+        }
+
+        /* Page 3: AI Report */
+        .print-page-3 {
+            padding: 40px;
+            page-break-before: always;
+            min-height: 100vh;
+        }
+
+        /* Styling enhancements for print */
         .bg-white, .dark\:bg-gray-800 {
           background-color: white !important;
           border: 1px solid #ddd !important;
           box-shadow: none !important;
-          border-radius: 8px !important;
-          margin-bottom: 20px;
+          color: black !important;
         }
 
-        /* Typography overrides */
-        .text-gray-900, .dark\:text-white {
-          color: #000 !important;
-        }
-        .text-gray-500, .dark\:text-gray-400 {
-          color: #444 !important;
-        }
-        .text-primary-600, .dark\:text-primary-400 {
-          color: #0284c7 !important; /* Force a readable blue */
-        }
-        .prose, .dark\:prose-invert {
-          color: #000 !important;
-        }
-
-        /* Recharts / SVG Fixes for Print */
-        /* Force axis text to be black regardless of theme */
-        .recharts-text {
-          fill: #000 !important; 
-        }
-        /* Force grid lines to be visible but subtle */
-        .recharts-cartesian-grid line {
-          stroke: #ccc !important;
-          opacity: 0.5 !important;
-        }
-        /* Ensure lines are visible */
-        .recharts-curve {
-          stroke-width: 2px !important;
-        }
-        /* Fix background areas */
-        .recharts-surface {
-          overflow: visible;
-        }
-
-        /* Print Header/Footer visibility */
-        .print-header-container {
-          display: block !important;
-          margin-bottom: 24px;
-          border-bottom: 2px solid #0284c7;
-          padding-bottom: 12px;
-        }
+        /* Recharts Fixes */
+        .recharts-text { fill: #000 !important; }
+        .recharts-cartesian-grid line { stroke: #ccc !important; opacity: 0.5 !important; }
+        .recharts-curve { stroke-width: 2px !important; }
         
-        .print-footer-container {
-          display: block !important;
-          position: fixed;
-          bottom: 0;
-          left: 0;
-          width: 100%;
-          text-align: center;
-          font-size: 10px;
-          color: #666;
-          border-top: 1px solid #eee;
-          padding-top: 8px;
-          background: white;
-        }
-
+        /* Text Color Fixes */
+        .text-gray-900, .dark\:text-white { color: #000 !important; }
+        .text-gray-500, .dark\:text-gray-400 { color: #444 !important; }
+        .text-primary-600, .dark\:text-primary-400 { color: #0284c7 !important; }
+        .prose, .dark\:prose-invert { color: #000 !important; }
+        
+        /* Ensure elements inside cards break nicely if needed */
         .print-break-inside {
           break-inside: avoid;
-          page-break-inside: avoid;
         }
       }
       
-      .print-header-container, .print-footer-container {
+      /* Hide print-specific sections on screen */
+      .print-cover-page {
         display: none;
+      }
+      .print-footer-container {
+        display: none; /* Only show on print pages if needed, but handled by page structure */
       }
     </style>
 <script type="importmap">

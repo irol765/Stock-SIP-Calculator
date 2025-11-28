@@ -1,11 +1,12 @@
 import { CalculatorState, SimulationResult, PortfolioItem, Currency } from '../types';
-import { HISTORICAL_RETURNS, TICKER_MAPPING, DIVIDEND_YIELDS, EXPENSE_RATIOS } from '../constants';
+import { HISTORICAL_RETURNS, TICKER_MAPPING, DIVIDEND_YIELDS } from '../constants';
 
 export const calculateWeightedExpenseRatio = (portfolio: PortfolioItem[]): number => {
   let weightedExpense = 0;
   portfolio.forEach(item => {
-    const expense = EXPENSE_RATIOS[item.ticker] || 0.0003;
-    weightedExpense += expense * (item.percentage / 100);
+    // Input is in percent (e.g. 0.03), convert to decimal (0.0003)
+    const expenseDecimal = (item.expenseRatio || 0) / 100;
+    weightedExpense += expenseDecimal * (item.percentage / 100);
   });
   return weightedExpense;
 };
@@ -25,6 +26,7 @@ export const calculateHistoricalAverage = (portfolio: PortfolioItem[]): number =
     portfolio.forEach(item => {
       const mainTicker = TICKER_MAPPING[item.ticker] || item.ticker;
       const tickerData = HISTORICAL_RETURNS[mainTicker];
+      // Fallback to 8% if ticker data is unknown
       const yearReturn = tickerData && tickerData[year] !== undefined ? tickerData[year] : 0.08;
       yearWeightedReturn += yearReturn * (item.percentage / 100);
     });
@@ -34,7 +36,7 @@ export const calculateHistoricalAverage = (portfolio: PortfolioItem[]): number =
   }
 
   // NOTE: This calculates Gross Return. Expense ratio is subtracted during the actual SIP projection loop.
-  return count > 0 ? (sumAnnualReturns / count) * 100 : 10;
+  return count > 0 ? (sumAnnualReturns / count) * 100 : 8.0;
 };
 
 export const calculateSIP = (state: CalculatorState): SimulationResult[] => {
@@ -45,7 +47,7 @@ export const calculateSIP = (state: CalculatorState): SimulationResult[] => {
   const monthlyContrib = state.monthlyContribution;
   const startYear = state.startYear || 2010;
   
-  // Calculate weighted expense ratio for the portfolio
+  // Calculate weighted expense ratio for the portfolio based on individual items
   const weightedExpenseRatio = calculateWeightedExpenseRatio(state.portfolio);
 
   for (let yearOffset = 0; yearOffset <= state.years; yearOffset++) {
@@ -74,7 +76,7 @@ export const calculateSIP = (state: CalculatorState): SimulationResult[] => {
         const mainTicker = TICKER_MAPPING[item.ticker] || item.ticker;
         const tickerData = HISTORICAL_RETURNS[mainTicker];
         
-        // Use historical data or fallback to 8% if future/unknown
+        // Use historical data or fallback to 8% if unknown
         const yearReturn = tickerData && tickerData[currentYear] !== undefined 
           ? tickerData[currentYear] 
           : 0.08; 
